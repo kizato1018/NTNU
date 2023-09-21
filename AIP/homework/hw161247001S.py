@@ -42,7 +42,7 @@ class ImageView(QGraphicsView):
         return
 
     def save_image(self):
-        if self.image is None:
+        if not self.scene().items():
             return
         fname = QFileDialog.getSaveFileName(
             self,
@@ -50,8 +50,8 @@ class ImageView(QGraphicsView):
             "${HOME}/image",
             "Image Files (*.jpg *.jpeg *.png *.bmp *.ppm)",
         )
-        if fname[0]:
-            cv2.imwrite(fname[0], self.image)
+        if fname[0] and fname[0].split('.'):
+            cv2.imencode(ext="."+fname[0].split('.')[-1], img=self.image)[1].tofile(fname[0])
     
     def setImage(self, image):
         if image is not None:
@@ -181,7 +181,7 @@ def rotate_image(image):
         
 
         # Define the rotation matrix
-        rotation_matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1)
+        rotation_matrix = cv2.getRotationMatrix2D((width / 2 - 1, height / 2 - 1), angle, 1)
 
         # Apply the rotation to the image
         rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))
