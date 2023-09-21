@@ -15,15 +15,17 @@ class ImageView(QGraphicsView):
         self.setScene(QGraphicsScene())
         self.image = None
         self.isClickable = Clickable
+        self.clicked = False
         
     def mousePressEvent(self, event):
-        if self.isClickable:
+        if self.isClickable and not self.clicked:
             self.parentWidget().parent().open_image()
             # self.open_image()
             if self.image is not None:
-                self.isClickable = False
+                self.clicked = True
 
     def open_image(self):
+        self.parentWidget().parent().clear_image()
         fname = QFileDialog.getOpenFileName(
             self,
             "Open File",
@@ -51,7 +53,15 @@ class ImageView(QGraphicsView):
             "Image Files (*.jpg *.jpeg *.png *.bmp *.ppm)",
         )
         if fname[0] and fname[0].split('.'):
-            cv2.imencode(ext="."+fname[0].split('.')[-1], img=self.image)[1].tofile(fname[0])
+            output_type = "."+fname[0].split('.')[-1]
+            output_image = self.image
+            if output_type == ".ppm":
+                if len(self.image.shape) == 2:
+                    output_image = cv2.cvtColor(self.image, cv2.COLOR_GRAY2BGR)
+                elif self.image.shape[2] == 4:
+                    output_image = cv2.cvtColor(self.image, cv2.COLOR_BGRA2BGR)
+
+            cv2.imencode(ext=output_type, img=output_image)[1].tofile(fname[0])
     
     def setImage(self, image):
         if image is not None:
@@ -97,6 +107,7 @@ class ImageView(QGraphicsView):
         self.image = None
         if self.scene().items():
             self.scene().removeItem(self.scene().items()[0])
+        self.clicked = False
 
 class MainWindow(QMainWindow):
     def __init__(self):
