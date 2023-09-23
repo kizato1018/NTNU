@@ -114,7 +114,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setGeometry(0, 0, 800, 600)
-        self.setWindowTitle("MainWindow")
+        self.setWindowTitle("AIP61247001S")
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
@@ -198,6 +198,7 @@ def rotate_image(image):
         rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))
         
         return rotated_image
+    
 
 
 if __name__ == "__main__":
