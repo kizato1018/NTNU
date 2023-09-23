@@ -1,2 +1,5 @@
 *.DS_Store
 AIP/homework/build
+AIP/homework/AIP
+*.spec
+DV/SciVis_HW1/present.raw
