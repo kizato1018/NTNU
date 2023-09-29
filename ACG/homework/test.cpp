@@ -17,10 +17,10 @@ int main() {
     int height = 0;
     Camera camera;
     vector<Object> objects;
-    Light light;
+    vector<Light> lights;
     
 
-    ifstream inputFile("hw2_input.txt");  // Open the input file
+    ifstream inputFile("test_input.txt");  // Open the input file
     if (!inputFile) {
         cerr << "Error: Unable to open input file." << endl;
         return 1;
@@ -69,13 +69,13 @@ int main() {
         } else if (type == 'L') {
             double lx, ly, lz;
             iss >> lx >> ly >> lz;
-            light = Light(vec3(lx, ly, lz));
+            lights.push_back(Light(vec3(lx, ly, lz)));
         }
     }
     objects.push_back(*object);
     camera = Camera(vec3(ex, ey, ez), vec3(dx, dy, dz), vec3(ux, uy, uz), f, width, height);
     // Do further processing with the data, such as ray tracing, image generation, etc.
-    ColorImage image = camera.Render(objects, light);
+    ColorImage image = camera.Render(objects, lights);
     image.outputPPM("output.ppm");
 
     inputFile.close();  // Close the input file

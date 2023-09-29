@@ -36,7 +36,7 @@ public:
 
     ColorImage Render(const std::vector<Sphere> &spheres, const std::vector<Triangle> &triangles);
     ColorImage Render(const std::vector<Object> &objects);
-    ColorImage Render(const std::vector<Object> &objects, const Light &light);
+    ColorImage Render(const std::vector<Object> &objects, const std::vector<Light>& lights);
 
 private:
     vec3 _position;
@@ -49,11 +49,12 @@ private:
     vec3 _lower_right;
     int _width;
     int _height;
+    vec3 _background_color;
 
-    bool _ray_trace(const Ray &ray, const std::vector<Sphere> &spheres, const std::vector<Triangle> &triangles, vec3 &intersection, vec3 &normal_vector);
-    bool _ray_trace(const Ray &ray, const std::vector<Object> &objects, vec3 &intersection);
-    bool _ray_trace(const Ray &ray, const Light &light, const std::vector<Object> &objects, vec3 &intersection, Pixel &pixel);
-    vec3 _phong_model(const Ray &ray, const Light &light, const Object &object, const vec3 &intersection, const vec3 &normal_vector);
+    // bool _ray_trace(const Ray &ray, const std::vector<Sphere> &spheres, const std::vector<Triangle> &triangles, vec3 &intersection, vec3 &normal_vector);
+    // bool _ray_trace(const Ray &ray, const std::vector<Object> &objects, vec3 &intersection);
+    // bool _ray_trace(const Ray &ray, const Light &light, const std::vector<Object> &objects, vec3 &intersection, Pixel &pixel);
+    // vec3 _phong_model(const Ray &ray, const Light &light, const Object &object, const vec3 &intersection, const vec3 &normal_vector);
 };
 
 #endif
