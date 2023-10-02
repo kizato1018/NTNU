@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-Camera::Camera(const vec3 position, vec3 direction, vec3 world_up, float fov, int width, int height) : _position(position), _direction(direction), _world_up(world_up), _fov(fov), _width(width), _height(height) {
+Camera::Camera(const vec3 position, vec3 direction, vec3 world_up, float fov, int width, int height) : _position(position), _direction(direction), _world_up(world_up), _fov(fov), _width(width), _height(height), _background_color(0) {
     double aspect_ratio = static_cast<double>(_height) / static_cast<double>(_width);
     double half_width = tan(_fov * 0.5 * (M_PI / 180.0));
     double half_height = aspect_ratio * half_width;
@@ -66,11 +66,12 @@ ColorImage Camera::Render(const std::vector<Object> &objects, const std::vector<
             vec3 target = _upper_left + (_lower_left - _upper_left) * dy * y + (_upper_right - _upper_left) * dx * x;
             vec3 direction = target - _position;
             Ray ray(_position, direction);
-            vec3 color = Shade(ray, lights, objects, _background_color);
+            // printf("pos:(%d, %d)\n", x, y);
+            vec3 color = Shade(ray, lights, objects, _background_color, 0, 10);
             Pixel p;
-            p.R = color[0] * 256 - 1;
-            p.G = color[1] * 256 - 1;
-            p.B = color[2] * 256 - 1;
+            p.R = color[0] * 255;
+            p.G = color[1] * 255;
+            p.B = color[2] * 255;
             
             img.writePixel(x, y, p);
 

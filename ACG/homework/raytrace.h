@@ -8,18 +8,19 @@
 #include "light.h"
 
 struct HitRecord{
-    HitRecord operator = (const HitRecord& rec){
+    HitRecord& operator = (const HitRecord& rec){
         in_ray = rec.in_ray;
         reflect_ray = rec.reflect_ray;
         normal_vector = rec.normal_vector;
         length2 = rec.length2;
         hit_object = rec.hit_object;
+        return *this;
     }
     Ray in_ray;
     Ray reflect_ray;
     vec3 normal_vector;
     float length2;
-    Object* hit_object;
+    const Object* hit_object;
 };
 
 bool rayTriangleIntersection(const Ray& ray, const Triangle& triangle, HitRecord& hitrec);

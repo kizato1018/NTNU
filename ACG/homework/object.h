@@ -10,6 +10,7 @@
 class Object{
 public:
     Object() {}
+    Object(std::string name) : _name(name) {}
     ~Object() {}
     inline void setMaterial(float R, float G, float B, float Ka, float Kd, float Ks, float exp, float reflect) {
         _color = vec3(R, G, B);
@@ -29,13 +30,14 @@ public:
     float Ks() const {return _Ks;}
     float exp() const {return _exp;}
     float reflect() const {return _reflect;}
-    
+    std::string name() const {return _name;}
 
 private:
     vec3 _color;
     float _Ka, _Kd, _Ks, _exp, _reflect;
     std::vector<Triangle> _triangles;
     std::vector<Sphere> _spheres;
+    std::string _name;
 };
 
 #endif

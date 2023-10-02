@@ -12,9 +12,9 @@
 class Camera{
 public:
     Camera() {}
-    Camera(const vec3 position) : _position(position) {}
+    Camera(const vec3 position) : _position(position), _background_color(0) {}
     Camera(const vec3 position, vec3 direction, vec3 world_up, float fov, int width, int height);
-    Camera(const vec3 position, const vec3 upper_left, const vec3 upper_right, const vec3 lower_left, const vec3 lower_right) : _position(position), _upper_left(upper_left), _upper_right(upper_right), _lower_left(lower_left), _lower_right(lower_right) {}
+    Camera(const vec3 position, const vec3 upper_left, const vec3 upper_right, const vec3 lower_left, const vec3 lower_right) : _position(position), _upper_left(upper_left), _upper_right(upper_right), _lower_left(lower_left), _lower_right(lower_right), _background_color(0) {}
     void setPos(const vec3 position) {_position = vec3(position);}
     void setDirection(const vec3 direction) {_direction = vec3(direction);}
     void setUp(const vec3 world_up) {_world_up = vec3(world_up);}

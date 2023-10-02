@@ -27,6 +27,7 @@ int main() {
     }
 
     string line;
+    int obj_cnt = 0;
     double ex, ey, ez;
     double dx, dy, dz, ux, uy, uz;
     double f;
@@ -63,7 +64,8 @@ int main() {
             double R, G, B, Ka, Kd, Ks, exp, reflect;
             if (object != nullptr)
                 objects.push_back(*object);
-            object = new Object();
+            string name = "object" + to_string(++obj_cnt);
+            object = new Object(name);
             iss >> R >> G >> B >> Ka >> Kd >> Ks >> exp >> reflect;
             object->setMaterial(R, G, B, Ka, Kd, Ks, exp, reflect);
         } else if (type == 'L') {
@@ -73,6 +75,9 @@ int main() {
         }
     }
     objects.push_back(*object);
+    // for(auto o : objects) {
+    //     printf("object: %s ", o.name().c_str());
+    // }
     camera = Camera(vec3(ex, ey, ez), vec3(dx, dy, dz), vec3(ux, uy, uz), f, width, height);
     // Do further processing with the data, such as ray tracing, image generation, etc.
     ColorImage image = camera.Render(objects, lights);

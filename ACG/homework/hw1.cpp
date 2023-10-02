@@ -4,8 +4,9 @@
 #include <vector>
 #include "algebra3.h"
 #include "ray.h"
-#include "triangle.h"
 #include "sphere.h"
+#include "triangle.h"
+#include "object.h"
 #include "camera.h"
 #include "imageIO.h"
 using namespace std;
@@ -14,11 +15,10 @@ int main() {
     int width = 0;
     int height = 0;
     Camera camera;
-    vector<Sphere> spheres;
-    vector<Triangle> triangles;
-    
+    vector<Object> objects;
+    Object *object = new Object();
 
-    ifstream inputFile("input.txt");  // Open the input file
+    ifstream inputFile("hw1_input.txt");  // Open the input file
     if (!inputFile) {
         cerr << "Error: Unable to open input file." << endl;
         return 1;
@@ -42,24 +42,26 @@ int main() {
             // Create an output object or store the values as needed
         } else if (type == 'R') {
             iss >> width >> height;
+            camera.setResolution(width, height);
             // Create a resolution object or store the values as needed
         } else if (type == 'S') {
             double sx, sy, sz, sradius;
             iss >> sx >> sy >> sz >> sradius;
             // Create a Sphere instance and store it
             Sphere sphere(vec3(sx, sy, sz), sradius);
-            spheres.push_back(sphere);
+            object->push_back(sphere);
         } else if (type == 'T') {
             double v1x, v1y, v1z, v2x, v2y, v2z, v3x, v3y, v3z;
             iss >> v1x >> v1y >> v1z >> v2x >> v2y >> v2z >> v3x >> v3y >> v3z;
             // Create a Triangle instance and store it
             Triangle triangle(vec3(v1x, v1y, v1z), vec3(v2x, v2y, v2z), vec3(v3x, v3y, v3z));
-            triangles.push_back(triangle);
+            object->push_back(triangle);
         }
     }
+    objects.push_back(*object);
 
     // Do further processing with the data, such as ray tracing, image generation, etc.
-    ColorImage image = camera.Render(width, height, spheres, triangles);
+    ColorImage image = camera.Render(objects);
     image.outputPPM("output.ppm");
 
     inputFile.close();  // Close the input file
