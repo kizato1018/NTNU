@@ -757,11 +757,11 @@ def gaussian_noise_process(height, width, channel, sigma, noise, noisy_image):
                 z1 = sigma * np.cos(2 * np.pi * r2) * np.sqrt(-2 * np.log(r1))
                 z2 = sigma * np.sin(2 * np.pi * r2) * np.sqrt(-2 * np.log(r1))
 
-                noise[y, x, z] = z1
+                noise[y, x, z] = z1 + 127
                 noisy_image[y, x, z] = noisy_image[y, x, z] + z1
 
                 if x + 1 < width:
-                    noise[y, x + 1, z] = z2
+                    noise[y, x + 1, z] = z2 + 127
                     noisy_image[y, x + 1, z] = noisy_image[y, x + 1, z] + z2
 
 # @jit
