@@ -26,7 +26,7 @@ struct HitRecord{
 bool rayTriangleIntersection(const Ray& ray, const Triangle& triangle, HitRecord& hitrec);
 bool raySphereIntersection(const Ray& ray, const Sphere& sphere, HitRecord& hitrec);
 bool rayTrace(const Ray& ray, const std::vector<Object> &objects, HitRecord& hitrec);
-vec3 Shade(const Ray& ray, const std::vector<Light>& lights, const std::vector<Object> &objects, const vec3 &background, int depth=0, int max_depth=10);
+vec3 Shade(const Ray& ray, const std::vector<Light>& lights, const std::vector<Object> &objects, const vec3 &background, int depth=0, int max_depth=1000);
 
 
 #endif
