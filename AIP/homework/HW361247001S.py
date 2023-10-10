@@ -10,11 +10,12 @@ from copy import deepcopy
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+from numba import jit
 
 class Ui_AIP61247001S(object):
     def setupUi(self, AIP61247001S):
         AIP61247001S.setObjectName("AIP61247001S")
-        AIP61247001S.resize(750, 561)
+        AIP61247001S.resize(839, 754)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -239,6 +240,7 @@ class Ui_AIP61247001S(object):
         self.noise_generation_page = QtWidgets.QWidget()
         self.noise_generation_page.setObjectName("noise_generation_page")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.noise_generation_page)
+        self.gridLayout_3.setContentsMargins(0, 0, 0, -1)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.noise_generation_widget = QtWidgets.QWidget(parent=self.noise_generation_page)
         self.noise_generation_widget.setEnabled(True)
@@ -282,6 +284,16 @@ class Ui_AIP61247001S(object):
         self.gridLayout_6.addWidget(self.horizontalWidget_5, 0, 0, 1, 1, QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+        self.noise_generation_generate_button = QtWidgets.QPushButton(parent=self.noise_generation_widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.noise_generation_generate_button.sizePolicy().hasHeightForWidth())
+        self.noise_generation_generate_button.setSizePolicy(sizePolicy)
+        self.noise_generation_generate_button.setMinimumSize(QtCore.QSize(40, 40))
+        self.noise_generation_generate_button.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.noise_generation_generate_button.setObjectName("noise_generation_generate_button")
+        self.horizontalLayout_10.addWidget(self.noise_generation_generate_button)
         self.noise_generation_save_button = QtWidgets.QPushButton(parent=self.noise_generation_widget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -316,24 +328,109 @@ class Ui_AIP61247001S(object):
         self.noise_generation_dst_histogram_view.setProperty("isClickable", False)
         self.noise_generation_dst_histogram_view.setObjectName("noise_generation_dst_histogram_view")
         self.gridLayout_6.addWidget(self.noise_generation_dst_histogram_view, 4, 2, 1, 1)
-        self.horizontalLayout_11 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
-        self.noise_generation_generate_button = QtWidgets.QPushButton(parent=self.noise_generation_widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.noise_generation_option = QtWidgets.QComboBox(parent=self.noise_generation_widget)
+        self.noise_generation_option.setMinimumSize(QtCore.QSize(140, 0))
+        self.noise_generation_option.setObjectName("noise_generation_option")
+        self.noise_generation_option.addItem("")
+        self.noise_generation_option.addItem("")
+        self.verticalLayout.addWidget(self.noise_generation_option)
+        self.noise_input_widget = QtWidgets.QStackedWidget(parent=self.noise_generation_widget)
+        self.noise_input_widget.setObjectName("noise_input_widget")
+        self.gaussian_noise_input_page = QtWidgets.QWidget()
+        self.gaussian_noise_input_page.setObjectName("gaussian_noise_input_page")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.gaussian_noise_input_page)
+        self.horizontalLayout.setContentsMargins(12, 0, 0, 0)
+        self.horizontalLayout.setSpacing(15)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.widget_4 = QtWidgets.QWidget(parent=self.gaussian_noise_input_page)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.noise_generation_generate_button.sizePolicy().hasHeightForWidth())
-        self.noise_generation_generate_button.setSizePolicy(sizePolicy)
-        self.noise_generation_generate_button.setMinimumSize(QtCore.QSize(80, 40))
-        self.noise_generation_generate_button.setObjectName("noise_generation_generate_button")
-        self.horizontalLayout_11.addWidget(self.noise_generation_generate_button)
-        self.gridLayout_6.addLayout(self.horizontalLayout_11, 0, 1, 1, 1)
+        sizePolicy.setHeightForWidth(self.widget_4.sizePolicy().hasHeightForWidth())
+        self.widget_4.setSizePolicy(sizePolicy)
+        self.widget_4.setObjectName("widget_4")
+        self.horizontalLayout.addWidget(self.widget_4)
+        self.label = QtWidgets.QLabel(parent=self.gaussian_noise_input_page)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
+        self.label.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label.setObjectName("label")
+        self.horizontalLayout.addWidget(self.label)
+        self.gaussian_sd_input = QtWidgets.QDoubleSpinBox(parent=self.gaussian_noise_input_page)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.gaussian_sd_input.sizePolicy().hasHeightForWidth())
+        self.gaussian_sd_input.setSizePolicy(sizePolicy)
+        self.gaussian_sd_input.setMinimum(0.01)
+        self.gaussian_sd_input.setMaximum(99999999.0)
+        self.gaussian_sd_input.setSingleStep(0.1)
+        self.gaussian_sd_input.setProperty("value", 1.0)
+        self.gaussian_sd_input.setObjectName("gaussian_sd_input")
+        self.horizontalLayout.addWidget(self.gaussian_sd_input)
+        self.widget_3 = QtWidgets.QWidget(parent=self.gaussian_noise_input_page)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_3.sizePolicy().hasHeightForWidth())
+        self.widget_3.setSizePolicy(sizePolicy)
+        self.widget_3.setObjectName("widget_3")
+        self.horizontalLayout.addWidget(self.widget_3)
+        self.noise_input_widget.addWidget(self.gaussian_noise_input_page)
+        self.salt_noise_input_page = QtWidgets.QWidget()
+        self.salt_noise_input_page.setObjectName("salt_noise_input_page")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.salt_noise_input_page)
+        self.horizontalLayout_3.setContentsMargins(0, 0, 15, 0)
+        self.horizontalLayout_3.setSpacing(10)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.widget_5 = QtWidgets.QWidget(parent=self.salt_noise_input_page)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_5.sizePolicy().hasHeightForWidth())
+        self.widget_5.setSizePolicy(sizePolicy)
+        self.widget_5.setObjectName("widget_5")
+        self.horizontalLayout_3.addWidget(self.widget_5)
+        self.salt_percent_input = QtWidgets.QDoubleSpinBox(parent=self.salt_noise_input_page)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.salt_percent_input.sizePolicy().hasHeightForWidth())
+        self.salt_percent_input.setSizePolicy(sizePolicy)
+        self.salt_percent_input.setMinimum(0.0)
+        self.salt_percent_input.setMaximum(100.0)
+        self.salt_percent_input.setProperty("value", 0.0)
+        self.salt_percent_input.setObjectName("salt_percent_input")
+        self.horizontalLayout_3.addWidget(self.salt_percent_input)
+        self.label_2 = QtWidgets.QLabel(parent=self.salt_noise_input_page)
+        self.label_2.setObjectName("label_2")
+        self.horizontalLayout_3.addWidget(self.label_2)
+        self.widget_2 = QtWidgets.QWidget(parent=self.salt_noise_input_page)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_2.sizePolicy().hasHeightForWidth())
+        self.widget_2.setSizePolicy(sizePolicy)
+        self.widget_2.setObjectName("widget_2")
+        self.horizontalLayout_3.addWidget(self.widget_2)
+        self.noise_input_widget.addWidget(self.salt_noise_input_page)
+        self.verticalLayout.addWidget(self.noise_input_widget)
+        self.gridLayout_6.addLayout(self.verticalLayout, 0, 1, 1, 1)
+        self.gridLayout_6.setRowStretch(0, 1)
+        self.gridLayout_6.setRowStretch(3, 10)
+        self.gridLayout_6.setRowStretch(4, 10)
         self.gridLayout_3.addWidget(self.noise_generation_widget, 0, 0, 1, 1)
         self.stackedWidget.addWidget(self.noise_generation_page)
         self.gridLayout.addWidget(self.stackedWidget, 1, 0, 1, 1)
         AIP61247001S.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=AIP61247001S)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 750, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 839, 36))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(parent=self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -355,6 +452,7 @@ class Ui_AIP61247001S(object):
 
         self.retranslateUi(AIP61247001S)
         self.stackedWidget.setCurrentIndex(2)
+        self.noise_input_widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(AIP61247001S)
 
     def retranslateUi(self, AIP61247001S):
@@ -372,8 +470,12 @@ class Ui_AIP61247001S(object):
         self.histogram_clear_button.setText(_translate("AIP61247001S", "Clear"))
         self.noise_generation_open_button.setText(_translate("AIP61247001S", "Open"))
         self.noise_generation_clear_button.setText(_translate("AIP61247001S", "Clear"))
-        self.noise_generation_save_button.setText(_translate("AIP61247001S", "Save"))
         self.noise_generation_generate_button.setText(_translate("AIP61247001S", "Generate"))
+        self.noise_generation_save_button.setText(_translate("AIP61247001S", "Save"))
+        self.noise_generation_option.setItemText(0, _translate("AIP61247001S", "Gaussian"))
+        self.noise_generation_option.setItemText(1, _translate("AIP61247001S", "Salt and pepper"))
+        self.label.setText(_translate("AIP61247001S", "σ:"))
+        self.label_2.setText(_translate("AIP61247001S", "%"))
         self.menuFile.setTitle(_translate("AIP61247001S", "File"))
         self.action_open_image.setText(_translate("AIP61247001S", "Open Image"))
         self.action_open_image.setShortcut(_translate("AIP61247001S", "Ctrl+O"))
@@ -381,7 +483,7 @@ class Ui_AIP61247001S(object):
         self.action_save_image.setShortcut(_translate("AIP61247001S", "Ctrl+S"))
         self.action_clear_image.setText(_translate("AIP61247001S", "Clear Image"))
         self.action_clear_image.setShortcut(_translate("AIP61247001S", "Ctrl+L"))
-      
+
 class ImageView(QGraphicsView):
     def __init__(self, parent: QWidget):
         super().__init__(parent)
@@ -401,7 +503,6 @@ class ImageView(QGraphicsView):
                 self.clicked = True
 
     def open_image(self):
-        clear_image()
         fname = QFileDialog.getOpenFileName(
             self,
             "Open File",
@@ -409,6 +510,7 @@ class ImageView(QGraphicsView):
             "Image Files (*.jpg *.jpeg *.png *.bmp *.ppm)",
         )
         if fname[0]:
+            clear_image()
             image = cv2.imdecode(np.fromfile(fname[0],dtype=np.uint8), cv2.IMREAD_UNCHANGED)
             self.setImage(image)
             self.update()
@@ -498,6 +600,11 @@ def setupScript(ui:Ui_AIP61247001S):
     ui.histogram_open_button.clicked.connect(open_image)
     ui.histogram_clear_button.clicked.connect(clear_image)
     ui.histogram_save_button.clicked.connect(save_image)
+    ui.noise_generation_open_button.clicked.connect(open_image)
+    ui.noise_generation_clear_button.clicked.connect(clear_image)
+    ui.noise_generation_save_button.clicked.connect(save_image)
+    ui.noise_generation_option.currentIndexChanged.connect(noise_generate_mode_change)
+    ui.noise_generation_generate_button.clicked.connect(noise_generate)
 
 
 def update_views():
@@ -524,6 +631,10 @@ def open_image():
         ui.histogram_src_view.open_image()
         ui.histogram_dst_view.setImage(histogram_image(ui.histogram_src_view.image))
         ui.histogram_dst_view.update()
+    elif page == 2:
+        ui.noise_generation_src_view.open_image()
+        ui.noise_generation_src_histogram_view.setImage(histogram_image(ui.noise_generation_src_view.image))
+        ui.noise_generation_src_histogram_view.update()
 @QtCore.pyqtSlot()
 def save_image():
     page = ui.stackedWidget.currentIndex()
@@ -531,6 +642,8 @@ def save_image():
         ui.rotate_dst_view.save_image()
     elif page == 1:
         ui.histogram_dst_view.save_image()
+    elif page == 2:
+        ui.noise_generation_dst_view.save_image()
 @QtCore.pyqtSlot()
 def clear_image():
     page = ui.stackedWidget.currentIndex()
@@ -540,16 +653,48 @@ def clear_image():
     elif page == 1:
         ui.histogram_src_view.clear()
         ui.histogram_dst_view.clear()
+    elif page == 2:
+        ui.noise_generation_src_view.clear()
+        ui.noise_generation_src_histogram_view.clear()
+        ui.noise_generation_noise_view.clear()
+        ui.noise_generation_noise_histogram_view.clear()
+        ui.noise_generation_dst_view.clear()
+        ui.noise_generation_dst_histogram_view.clear()
 @QtCore.pyqtSlot()
 def switch_page(page):
     ui.stackedWidget.setCurrentIndex(page)
     print(ui.stackedWidget.currentIndex())
 @QtCore.pyqtSlot()
 def rotate():
+    if ui.rotate_src_view.image is None:
+        return
     if ui.rotate_dst_view.image is None:
         ui.rotate_dst_view.setImage(ui.rotate_src_view.image)
     ui.rotate_dst_view.setImage(rotate_image(ui.rotate_dst_view.image))
     ui.rotate_dst_view.update()
+@QtCore.pyqtSlot()
+def noise_generate_mode_change():
+    ui.noise_input_widget.setCurrentIndex(ui.noise_generation_option.currentIndex())
+@QtCore.pyqtSlot()
+def noise_generate():
+    if ui.noise_generation_src_view.image is None:
+        return
+    if ui.noise_generation_option.currentIndex() == 0:
+        # Gaussian Noise
+        noise, noisy_image = gaussian_noise(ui.noise_generation_src_view.image, ui.gaussian_sd_input.value())
+    elif ui.noise_generation_option.currentIndex() == 1:
+        # Salt and pepper Noise
+        noise, noisy_image = salt_and_pepper_noise(ui.noise_generation_src_view.image, ui.salt_percent_input.value())
+    ui.noise_generation_noise_view.setImage(noise)
+    ui.noise_generation_noise_histogram_view.setImage(histogram_image(noise))
+    ui.noise_generation_dst_view.setImage(noisy_image)
+    ui.noise_generation_dst_histogram_view.setImage(histogram_image(noisy_image))
+    ui.noise_generation_noise_view.update()
+    ui.noise_generation_noise_histogram_view.update()
+    ui.noise_generation_dst_view.update()
+    ui.noise_generation_dst_histogram_view.update()
+
+    
 
 
 def rotate_image(image):
@@ -564,7 +709,7 @@ def rotate_image(image):
 def histogram_image(image):
     if image is None:
         return
-    if len(image.shape) == 2:
+    if len(image.shape) == 2 or image.shape[2] == 1:
         img = deepcopy(image)
     elif image.shape[2] == 3:
         img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -581,6 +726,7 @@ def histogram_image(image):
     ax0.bar(range(256), hist, color="gray", width=1)
     ax0.set_xlim(-1, 256)
     ax0.set_xticks([])
+    plt.ylabel('Frequency', fontsize=14, color='black')
 
     ax1 = plt.subplot(gs[1])
     plt.imshow(gradient, cmap="gray", aspect='auto')
@@ -589,6 +735,7 @@ def histogram_image(image):
 
     plt.xticks(ax1.get_xticks())
     plt.xlim(0, 256)
+    plt.xlabel('Intensity', fontsize=14, color='black')
 
     plt.tight_layout()
 
@@ -602,6 +749,86 @@ def histogram_image(image):
     
     return hist_image
 
+@jit
+def gaussian_noise_process(height, width, channel, sigma, noise, noisy_image):
+    for z in range(channel):
+        for y in range(height):
+            for x in range(0, width, 2):
+                r1, r2 = np.random.rand(), np.random.rand()
+
+                z1 = sigma * np.cos(2 * np.pi * r2) * np.sqrt(-2 * np.log(r1))
+                z2 = sigma * np.sin(2 * np.pi * r2) * np.sqrt(-2 * np.log(r1))
+
+                noise[y, x, z] = z1 + 127
+                noisy_image[y, x, z] = noisy_image[y, x, z] + z1
+
+                if x + 1 < width:
+                    noise[y, x + 1, z] = z2 + 127
+                    noisy_image[y, x + 1, z] = noisy_image[y, x + 1, z] + z2
+
+# @jit
+def gaussian_noise(image, sigma: float):
+    if image is None:
+        return
+    if len(image.shape) == 2:
+        height, width = image.shape
+        channel = 1
+    else:
+        height, width, channel = image.shape
+
+    G = 256 
+
+    noise = np.zeros((height, width, channel), dtype=np.uint8)
+    noisy_image = np.copy(image)
+    noisy_image = np.reshape(noisy_image, (height, width, channel))
+
+    gaussian_noise_process(height, width, channel, sigma, noise, noisy_image)    
+    # for z in range(channel):
+    #     for y in range(height):
+    #         for x in range(0, width, 2):
+    #             r1, r2 = np.random.rand(), np.random.rand()
+
+    #             z1 = sigma * np.cos(2 * np.pi * r2) * np.sqrt(-2 * np.log(r1))
+    #             z2 = sigma * np.sin(2 * np.pi * r2) * np.sqrt(-2 * np.log(r1))
+
+    #             noise[y, x, z] = z1
+    #             noisy_image[y, x, z] = noisy_image[y, x, z] + z1
+
+    #             if x + 1 < width:
+    #                 noise[y, x + 1, z] = z2
+    #                 noisy_image[y, x + 1, z] = noisy_image[y, x + 1, z] + z2
+
+
+    noise = np.clip(noise, 0, G - 1)
+    noisy_image = np.clip(noisy_image, 0, G - 1)
+
+    return noise, noisy_image
+
+def salt_and_pepper_noise(image, percentage:float):
+    if image is None:
+        return
+    if len(image.shape) == 2:
+        height, width = image.shape
+        channel = 1
+    else:
+        height, width, channel = image.shape
+
+    noise = np.zeros((height, width, channel), dtype=np.uint8)
+    noise.fill(127)
+    noisy_image = np.copy(image)
+    noisy_image = np.reshape(noisy_image, (height, width, channel))
+
+    num_pixels = int(percentage / 100 * height * width)
+
+    salt_coords = [np.random.randint(0, height, num_pixels//2), np.random.randint(0, width, num_pixels//2)]
+    pepper_coords = [np.random.randint(0, height, num_pixels//2), np.random.randint(0, width, num_pixels//2)]
+
+    noise[salt_coords[0], salt_coords[1], :] = 255
+    noise[pepper_coords[0], pepper_coords[1], :] = 0
+    noisy_image[salt_coords[0], salt_coords[1], :] = 255
+    noisy_image[pepper_coords[0], pepper_coords[1], :] = 0
+
+    return noise, noisy_image
 
 if __name__ == "__main__":
     import sys
