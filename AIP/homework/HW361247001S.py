@@ -726,6 +726,7 @@ def histogram_image(image):
     ax0.bar(range(256), hist, color="gray", width=1)
     ax0.set_xlim(-1, 256)
     ax0.set_xticks([])
+    plt.ylabel('Frequency', fontsize=14, color='black')
 
     ax1 = plt.subplot(gs[1])
     plt.imshow(gradient, cmap="gray", aspect='auto')
@@ -734,6 +735,7 @@ def histogram_image(image):
 
     plt.xticks(ax1.get_xticks())
     plt.xlim(0, 256)
+    plt.xlabel('Intensity', fontsize=14, color='black')
 
     plt.tight_layout()
 
@@ -812,13 +814,14 @@ def salt_and_pepper_noise(image, percentage:float):
         height, width, channel = image.shape
 
     noise = np.zeros((height, width, channel), dtype=np.uint8)
+    noise.fill(127)
     noisy_image = np.copy(image)
     noisy_image = np.reshape(noisy_image, (height, width, channel))
 
     num_pixels = int(percentage / 100 * height * width)
 
-    salt_coords = [np.random.randint(0, height, num_pixels), np.random.randint(0, width, num_pixels)]
-    pepper_coords = [np.random.randint(0, height, num_pixels), np.random.randint(0, width, num_pixels)]
+    salt_coords = [np.random.randint(0, height, num_pixels//2), np.random.randint(0, width, num_pixels//2)]
+    pepper_coords = [np.random.randint(0, height, num_pixels//2), np.random.randint(0, width, num_pixels//2)]
 
     noise[salt_coords[0], salt_coords[1], :] = 255
     noise[pepper_coords[0], pepper_coords[1], :] = 0
