@@ -36,7 +36,7 @@ ColorImage Camera::Render(const std::vector<Object> &objects) {
     float dy = (_upper_left - _lower_left).length() / (_height-1);
     for(int y = 0; y < _height; y++) {
         for (int x = 0; x < _width; x++) {
-            vec3 target = _upper_left + (_lower_left - _upper_left) * dy * y + (_upper_right - _upper_left) * dx * x;
+            vec3 target = _upper_left + (_lower_left - _upper_left).normalize()  * dy * y + (_upper_right - _upper_left).normalize()  * dx * x;
             vec3 direction = target - _position;
             Ray ray(_position, direction);
             HitRecord rec;
@@ -55,115 +55,91 @@ ColorImage Camera::Render(const std::vector<Object> &objects) {
     return img;
 }
 
-ColorImage Camera::Render(const std::vector<Object> &objects, const std::vector<Light>& lights) {
-    ColorImage img;
+// ColorImage Camera::Render(const std::vector<Object> &objects, const std::vector<Light>& lights) {
+//     ColorImage img;
     
+//     img.init(_width, _height);
+//     float dx = (_upper_right - _upper_left).length() / (_width-1);
+//     float dy = (_upper_left - _lower_left).length() / (_height-1);
+//     for(int y = 0; y < _height; y++) {
+//         for (int x = 0; x < _width; x++) {
+//             vec3 target = _upper_left + (_lower_left - _upper_left).normalize() * dy * y + (_upper_right - _upper_left).normalize() * dx * x;
+//             vec3 direction = target - _position;
+//             Ray ray(_position, direction);
+//             // printf("pos:(%d, %d)\n", x, y);
+//             vec3 color = Shade(ray, lights, objects, _background_color, 0, 10);
+//             Pixel p;
+//             p.R = color[0] * 255;
+//             p.G = color[1] * 255;
+//             p.B = color[2] * 255;
+            
+//             img.writePixel(x, y, p);
+
+//         }
+//     }
+//     return img;
+// }
+
+ColorImage Camera::Render(const std::vector<Object>& objects, const std::vector<Light>& lights) {
+    ColorImage img;
+    _background_color = vec3(50);
+
     img.init(_width, _height);
-    float dx = (_upper_right - _upper_left).length() / (_width-1);
-    float dy = (_upper_left - _lower_left).length() / (_height-1);
-    for(int y = 0; y < _height; y++) {
+    float dx = (_upper_right - _upper_left).length() / (_width - 1);
+    float dy = (_upper_left - _lower_left).length() / (_height - 1);
+
+    float sensor_width = 4.0 / 3.0;  // 4/3 inch format
+    float f = 1.50;        // Focal length in meters (15 mm)
+
+    // Calculate the size of the aperture based on the f-number (f/2.2)
+    float aperture_radius = f / (2.2 * 2.0);
+
+    // Calculate the distance to the focal plane (in focus)
+    float focal_distance = 20;  // 60 cm
+
+    // Number of samples for depth of field
+    int num_samples = 64;
+
+    for (int y = 0; y < _height; y++) {
         for (int x = 0; x < _width; x++) {
-            vec3 target = _upper_left + (_lower_left - _upper_left) * dy * y + (_upper_right - _upper_left) * dx * x;
-            vec3 direction = target - _position;
-            Ray ray(_position, direction);
-            // printf("pos:(%d, %d)\n", x, y);
-            vec3 color = Shade(ray, lights, objects, _background_color, 0, 10);
+            vec3 color(0.0, 0.0, 0.0); // Initialize color accumulator
+
+            for (int s = 0; s < num_samples; s++) {
+                // Randomly sample within the aperture
+                float rand_x = static_cast<float>(rand()) / RAND_MAX;
+                float rand_y = static_cast<float>(rand()) / RAND_MAX;
+
+                // Calculate the offset from the camera position to create the depth of field effect
+                vec3 aperture_offset = vec3(rand_x, rand_y, 0.0) * aperture_radius;
+
+                vec3 target = _upper_left + (_lower_left - _upper_left).normalize() * dy * y + (_upper_right - _upper_left).normalize() * dx * x;
+                vec3 direction = (target - _position).normalize();
+                
+                // Calculate the point of focus along the ray
+                vec3 focus_point = _position + direction * focal_distance;
+
+                // Offset the camera position to simulate depth of field
+                vec3 lens_position = _position + aperture_offset;
+
+                // Create a new ray from the lens_position to the focus point
+                Ray ray(lens_position, (focus_point - lens_position).normalize());
+
+                vec3 sample_color = Shade(ray, lights, objects, _background_color, 0, 10);
+
+                color += sample_color;
+            }
+
+            // Average the color samples to reduce noise
+            color /= static_cast<float>(num_samples);
+
             Pixel p;
             p.R = color[0] * 255;
             p.G = color[1] * 255;
             p.B = color[2] * 255;
-            
-            img.writePixel(x, y, p);
 
+            img.writePixel(x, y, p);
         }
     }
+
     return img;
 }
-
-// bool Camera::_ray_trace(const Ray &ray, const std::vector<Sphere> &spheres, const std::vector<Triangle> &triangles, vec3 &intersection, vec3 &normal_vector)
-// {
-//     bool hit = false;
-//     for (auto s : spheres)
-//     {
-//         vec3 inter;
-//         if (raySphereIntersection(ray, s, inter))
-//         {
-//             if ((!hit) || (hit && inter.length2() < intersection.length2())) {
-//                 intersection = inter;
-//                 normal_vector = intersection - s.center();
-//             }
-//             hit = true;
-//         }
-//     }
-//     for (auto t : triangles)
-//     {
-//         vec3 inter;
-//         if (rayTriangleIntersection(ray, t, inter))
-//         {
-//             if ((!hit) || (hit && inter.length2() < intersection.length2())) {
-//                 intersection = inter;
-//                 vec3 e1, e2;
-//                 e1 = t.v1() - t.v0();
-//                 e2 = t.v2() - t.v0();
-//                 normal_vector = (e1 ^ e2).normalize();
-//                 normal_vector = (normal_vector * ray.direction() > 0) ? -normal_vector : normal_vector;
-//             }
-//             hit = true;
-//         }
-//     }
-//     return hit;
-// }
-
-// bool Camera::_ray_trace(const Ray &ray, const std::vector<Object> &objects, vec3 &intersection) {
-//     bool hit = false;
-//     vec3 normal_vector;
-//     for(auto o : objects) {
-//         hit |= _ray_trace(ray, o.spheres(), o.triangles(), intersection, normal_vector);
-//     }
-//     return hit;
-// }
-// bool Camera::_ray_trace(const Ray &ray, const Light &light, const std::vector<Object> &objects, vec3 &intersection, Pixel &pixel) {
-//     bool hit = false;
-//     vec3 inter = intersection;
-//     vec3 normal_vector;
-//     vec3 final_color;
-//     for(auto o : objects) {
-//         hit |= _ray_trace(ray, o.spheres(), o.triangles(), intersection, normal_vector);
-//         if(hit && inter != intersection) {
-//             inter = intersection;
-//             final_color = _phong_model(ray, light, o, intersection, normal_vector);
-//             pixel.R = final_color[0] * 256 - 1;
-//             pixel.G = final_color[1] * 256 - 1;
-//             pixel.B = final_color[2] * 256 - 1;
-//         }
-//     }
-//     return hit;
-// }
-
-// vec3 Camera::_phong_model(const Ray &ray, const Light &light, const Object &object, const vec3 &intersection, const vec3 &normal_vector) {
-//     vec3 I_ambient = object.color() * object.Ka();
-//     vec3 I_diffuse;
-//     vec3 I_specular;
-//     vec3 light_direction = (light.position() - intersection).normalize();
-//     float cos_theta = normal_vector * light_direction;
-//     if(cos_theta > 0)
-//         I_diffuse = object.color() * object.Kd() * cos_theta;
-//     vec3 h_vector = (light_direction - ray.direction()) * 0.5;
-//     float cos_alpha = h_vector * normal_vector;
-//     if(cos_alpha > 0)
-//         I_specular = object.Ks() * pow(cos_alpha, object.exp());
-
-
-//     // printf("I_ambient:(%f, %f, %f)\n", I_ambient[0], I_ambient[1], I_ambient[2]);
-//     // printf("I_diffuse:(%f, %f, %f)\n", I_diffuse[0], I_diffuse[1], I_diffuse[2]);
-//     // printf("I_specular:(%f, %f, %f)\n", I_specular[0], I_specular[1], I_specular[2]);
-//     return I_ambient + I_diffuse + I_specular;
-
-// }
-
-// -0.5 0.5 0 
-// 0.5 0.5 0
-//  -0.5, -0.5, 0
-//  0.5, -0.5, 0
-// T -0.5, -0.5, 0.0 -0.5, -0.5, 1.0 0.5, -0.5, 1.0
-// T -0.5, -0.5, 0.0  0.5, -0.5, 0.0 0.5, -0.5, 1.0

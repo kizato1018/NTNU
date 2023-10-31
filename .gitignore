@@ -4,3 +4,9 @@ AIP/homework/AIP
 *.spec
 DV/SciVis_HW1/present.raw
 **/~*
+ACG/homework/*.zip
+ACG/homework/*.o
+ACG/homework/hw1
+ACG/homework/hw2
+ACG/homework/hw3
+ACG/homework/test

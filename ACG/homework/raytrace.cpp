@@ -141,8 +141,7 @@ bool inShadow(const vec3& intersection, const std::vector<Light>& lights, const 
     const double EPS = 1e-4;
     for(auto light : lights) {
         vec3 light_direct = light.position() - intersection;
-        // vec3 origin = intersection; //(0.249118, 0.588258, 0.481017)
-        vec3 origin = intersection + light_direct * EPS; // (0.296627, 0.632375, 0.426207)
+        vec3 origin = intersection + light_direct * EPS;
         light_direct = light.position() - intersection;
         Ray ray(origin, light_direct);
         // print("intersection:", intersection);
@@ -196,39 +195,21 @@ vec3 Shade(const Ray& ray, const std::vector<Light>& lights, const std::vector<O
                 float cos_theta = rec.normal_vector * light_direction;
                 if(cos_theta > 0)
                     I_diffuse = object.color() * object.Kd() * cos_theta;
-                vec3 h_vector = (light_direction - ray.direction().normalize()) * 0.5;
+                vec3 h_vector = (light_direction - ray.direction().normalize()).normalize();
                 float cos_alpha = h_vector * rec.normal_vector;
-                // float cos_alpha = -ray.direction() * rec.reflect_ray.direction();
                 if(cos_alpha > 0)
                     I_specular = light.color() * object.Ks() * pow(cos_alpha, object.exp());
             }
             if(depth < max_depth) {
-                // if(object.reflect() > 0) {
-                    // printf("Reflect %d\n", depth+1);
-                    // print("ray origin:", ray.origin());
-                    // print("ray direction:", ray.direction());
-                    // print("normal vector", rec.normal_vector);
-                    // print("reflect origin:", rec.reflect_ray.origin());
-                    // print("reflect direction:", rec.reflect_ray.direction());
                     I_reflect = object.reflect() * Shade(rec.reflect_ray, lights, objects, vec3(0), depth+1, max_depth);
-                // }
             }
         }
         // printf("hit object: %s\n", object.name().c_str());
+        color = ((1 - rec.hit_object->reflect()) * (I_ambient + I_diffuse + I_specular + I_reflect)) + (rec.hit_object->reflect() * I_reflect);
     }
-    color = ((1 - rec.hit_object->reflect()) * (I_ambient + I_diffuse + I_specular + I_reflect)) + (rec.hit_object->reflect() * I_reflect);
     color[0] = (color[0] > 1) ? 1 : color[0];
     color[1] = (color[1] > 1) ? 1 : color[1];
     color[2] = (color[2] > 1) ? 1 : color[2];
-    // if(shadow) {
-    //     printf("In shadow\n");
-    // }
-    // print("I_ambient:", I_ambient);
-    // print("I_diffuse:", I_diffuse);
-    // print("I_specular:", I_specular);
-    // print("I_reflect:", I_reflect);
-    // print("color:", color);
-    // puts("");
     return color;
 }
 
