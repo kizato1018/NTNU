@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1455</width>
-    <height>940</height>
+    <width>945</width>
+    <height>794</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -48,7 +48,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="image_rotate_page">
        <layout class="QGridLayout" name="gridLayout_7">
@@ -255,43 +255,6 @@
            <property name="horizontalSpacing">
             <number>20</number>
            </property>
-           <item row="0" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <item>
-              <widget class="QPushButton" name="histogram_save_button">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Save</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="3" column="0">
-            <widget class="ImageView" name="histogram_src_view">
-             <property name="isClickable" stdset="0">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="ImageView" name="histogram_dst_view">
-             <property name="isClickable" stdset="0">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <widget class="QWidget" name="horizontalWidget_4" native="true">
              <property name="minimumSize">
@@ -340,6 +303,43 @@
                </widget>
               </item>
              </layout>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="ImageView" name="histogram_dst_view">
+             <property name="isClickable" stdset="0">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QPushButton" name="histogram_save_button">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Save</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="0">
+            <widget class="ImageView" name="histogram_src_view">
+             <property name="isClickable" stdset="0">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -459,6 +459,34 @@
              </layout>
             </widget>
            </item>
+           <item row="3" column="2">
+            <widget class="ImageView" name="noise_generation_dst_view">
+             <property name="isClickable" stdset="0">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="ImageView" name="noise_generation_noise_view">
+             <property name="isClickable" stdset="0">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="ImageView" name="noise_generation_src_view">
+             <property name="isClickable" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="ImageView" name="noise_generation_src_histogram_view">
+             <property name="isClickable" stdset="0">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="2">
             <layout class="QHBoxLayout" name="horizontalLayout_10">
              <item>
@@ -506,34 +534,6 @@
               </widget>
              </item>
             </layout>
-           </item>
-           <item row="3" column="0">
-            <widget class="ImageView" name="noise_generation_src_view">
-             <property name="isClickable" stdset="0">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="ImageView" name="noise_generation_dst_view">
-             <property name="isClickable" stdset="0">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="ImageView" name="noise_generation_noise_view">
-             <property name="isClickable" stdset="0">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="ImageView" name="noise_generation_src_histogram_view">
-             <property name="isClickable" stdset="0">
-              <bool>false</bool>
-             </property>
-            </widget>
            </item>
            <item row="4" column="1">
             <widget class="ImageView" name="noise_generation_noise_histogram_view">
@@ -2358,6 +2358,151 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="equalization_page">
+       <layout class="QGridLayout" name="gridLayout_13">
+        <item row="0" column="0">
+         <widget class="QWidget" name="equalization_widget" native="true">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="acceptDrops">
+           <bool>false</bool>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_12" rowstretch="0,0,0,0" columnstretch="0,0,0">
+           <item row="1" column="2" rowspan="2">
+            <widget class="ImageView" name="equalization_dst_view">
+             <property name="isClickable" stdset="0">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="ImageView" name="equalization_src_view">
+             <property name="isClickable" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="ImageView" name="equalization_dst_hist_view">
+             <property name="isClickable" stdset="0">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QPushButton" name="equalization_equalize_button">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Equalize</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="equalization_save_button">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Save</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="1">
+            <widget class="ImageView" name="equalization_src_hist_view">
+             <property name="isClickable" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QWidget" name="horizontalWidget_7" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>20</height>
+              </size>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
+              <item>
+               <widget class="QPushButton" name="equalization_open_button">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Open</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="equalization_clear_button">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Clear</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
     <item row="0" column="0">
@@ -2496,7 +2641,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="convolution_switch_buttion">
+        <widget class="QPushButton" name="convolution_switch_button">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -2505,6 +2650,20 @@
          </property>
          <property name="text">
           <string>Convolution</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="equalization_switch_button">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Histogram
+Equalization</string>
          </property>
         </widget>
        </item>
@@ -2528,7 +2687,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1455</width>
+     <width>945</width>
      <height>21</height>
     </rect>
    </property>
@@ -2580,7 +2739,7 @@
   <tabstop>rotate_switch_button</tabstop>
   <tabstop>histogram_switch_button</tabstop>
   <tabstop>noise_generation_switch_button</tabstop>
-  <tabstop>convolution_switch_buttion</tabstop>
+  <tabstop>convolution_switch_button</tabstop>
   <tabstop>rotate_open_button</tabstop>
   <tabstop>rotate_clear_button</tabstop>
   <tabstop>rotate_button</tabstop>
