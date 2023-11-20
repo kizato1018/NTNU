@@ -1,4 +1,0 @@
-To implement the distributed ray tracer. 
-First, input the camera parameters and length unit is centimeter.
-Then get the random x and random y times aperture radius as the offset for our target ray.
-Repeat this processes for n_sample times and average the color values will become the final color value.

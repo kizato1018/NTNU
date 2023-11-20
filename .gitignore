@@ -1,12 +1,5 @@
 *.DS_Store
-AIP/homework/build
-AIP/homework/AIP
 *.spec
-DV/SciVis_HW1/present.raw
+**/*.raw
 **/~*
-ACG/homework/*.zip
-ACG/homework/*.o
-ACG/homework/hw1
-ACG/homework/hw2
-ACG/homework/hw3
-ACG/homework/test
+**/*.zip
